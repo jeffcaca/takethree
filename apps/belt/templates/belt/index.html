@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+         {% load staticfiles %}
+        <link rel="stylesheet" href="{% static 'belt/css/styles.css' %}" media="screen" title="no title" charset="utf-8">
+     	<!-- Latest compiled and minified CSS -->
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    	<!-- Optional theme -->
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    	<!-- Latest compiled and minified JavaScript -->
+    	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <title>Welcome page</title> 
+
+    </head>
+    <body>
+           
+     <div class="container">
+        <div class="header">
+            <h3>Welcome {{request.session.first_name}}</h3>
+  
+        </div>
+        <div class="headerright">
+          
+            <a href="{% url 'login:logout' %}">Logout</a>
+        </div>
+      
+
+      <br><br>
+        <p>Your Trip Schedules</p>
+      <table class='table table-bordered table-hover'>
+        <thead>
+       
+          <tr>
+            <th>Destination</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Plan</th>
+          </tr>
+        
+        </thead>
+        <tbody>
+      {% for plan in myplans %}
+          <tr>
+            <td><a href="{% url 'belt:viewplan' id=plan.id %}">{{plan.destination}}</a></td>
+            <td>{{plan.start}}</td>
+            <td>{{plan.end}}</td>
+            <td>{{plan.plan}}</td>
+          </tr>
+       {% endfor %}
+ 
+     
+
+
+        </tbody>
+      </table>
+<br><br><br>
+ <p>Other's users travel plans</p>
+      <table class='table table-bordered table-hover'>
+        <thead>
+      
+          <tr>
+          	<th>Name</th>
+            <th>Destination</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Action</th>
+          </tr>
+      
+        </thead>
+        <tbody>
+        
+       		   {% for plan in othersplans %}
+          <tr>
+          	<td>{{plan.creator.alias}}</td>
+            <td><a href="{% url 'belt:viewplan' id=plan.id %}">{{plan.destination}}</a></td>
+            <td>{{plan.start}}</td>
+            <td>{{plan.end}}</td>
+            <td><form action ="{% url 'belt:join' id=plan.id %}" method = "POST">
+            <input type = "submit" value="Join">
+
+        {% csrf_token %}</form></td>
+          </tr>
+        
+ {% endfor %}
+ 
+     
+
+
+        </tbody>
+      </table>
+
+<br><br>
+
+<br><br>
+  <div class="headerright">
+          
+            <a href="{% url 'belt:addplan' %}">Add Travelplan</a>
+        </div>
+
+
+	 </div>
+    </body>
+</html>
